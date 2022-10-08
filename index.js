@@ -65,76 +65,77 @@ async function main() {
 
   console.log(config);
 
-  setInterval(() => {
-    const items = api
-      .post("item/v7/", {
-        json: {
-          favorites_only: true,
-          origin: {
-            latitude: 0,
-            longitude: 0,
-          },
-          radius: 200,
-          user_id: config.userId,
-        },
-        headers: {
-          Authorization: `Bearer ${config.accessToken}`,
-        },
-      })
-      .then((items) => {
-        var json = JSON.parse(items.body);
-        for (var i = 0; i < json.items.length; i++) {
-          //current time in [hours:minutes]
-          var time = new Date().toLocaleTimeString();
-          console.log(
-            "[" +
-              time +
-              "] " +
-              "Checked " +
-              json.items[i].display_name +
-              " " +
-              json.items[i].item.name +
-              " AVAILABLE: " +
-              json.items[i].items_available
-          );
+  //TODO TGTG made some sort of datadome protection.... need to find a way around this...
+  // setInterval(() => {
+  //   const items = api
+  //     .post("item/v7/", {
+  //       json: {
+  //         favorites_only: true,
+  //         origin: {
+  //           latitude: 0,
+  //           longitude: 0,
+  //         },
+  //         radius: 200,
+  //         user_id: config.userId,
+  //       },
+  //       headers: {
+  //         Authorization: `Bearer ${config.accessToken}`,
+  //       },
+  //     })
+  //     .then((items) => {
+  //       var json = JSON.parse(items.body);
+  //       for (var i = 0; i < json.items.length; i++) {
+  //         //current time in [hours:minutes]
+  //         var time = new Date().toLocaleTimeString();
+  //         console.log(
+  //           "[" +
+  //             time +
+  //             "] " +
+  //             "Checked " +
+  //             json.items[i].display_name +
+  //             " " +
+  //             json.items[i].item.name +
+  //             " AVAILABLE: " +
+  //             json.items[i].items_available
+  //         );
 
-          //check if current exists
-          if (current[json.items[i].store.store_id] != undefined) {
-            if (
-              current[json.items[i].store.store_id].available !=
-              json.items[i].items_available
-            ) {
-              if (json.items[i].items_available == 0) {
-                notify(
-                  json.items[i].display_name +
-                    " " +
-                    json.items[i].item.name +
-                    " is niet meer beschikbaar"
-                );
-              } else {
-                console.log("change in availability");
-                notify(
-                  "Het item " +
-                    json.items[i].item.name +
-                    " heeft een verandering in de voorraad %0A%0A " +
-                    json.items[i].display_name +
-                    " %0A%0A Vooraad is van " +
-                    current[json.items[i].store.store_id].available +
-                    " naar " +
-                    json.items[i].items_available
-                );
-              }
-            }
-          }
+  //         //check if current exists
+  //         if (current[json.items[i].store.store_id] != undefined) {
+  //           if (
+  //             current[json.items[i].store.store_id].available !=
+  //             json.items[i].items_available
+  //           ) {
+  //             if (json.items[i].items_available == 0) {
+  //               notify(
+  //                 json.items[i].display_name +
+  //                   " " +
+  //                   json.items[i].item.name +
+  //                   " is niet meer beschikbaar"
+  //               );
+  //             } else {
+  //               console.log("change in availability");
+  //               notify(
+  //                 "Het item " +
+  //                   json.items[i].item.name +
+  //                   " heeft een verandering in de voorraad %0A%0A " +
+  //                   json.items[i].display_name +
+  //                   " %0A%0A Vooraad is van " +
+  //                   current[json.items[i].store.store_id].available +
+  //                   " naar " +
+  //                   json.items[i].items_available
+  //               );
+  //             }
+  //           }
+  //         }
 
-          current[json.items[i].store.store_id] = {
-            available: json.items[i].items_available,
-            name: json.items[i].item.name,
-            display_name: json.items[i].display_name,
-          };
-        }
-      });
-  }, 60000);
+  //         current[json.items[i].store.store_id] = {
+  //           available: json.items[i].items_available,
+  //           name: json.items[i].item.name,
+  //           display_name: json.items[i].display_name,
+  //         };
+  //       }
+  //     });
+  // }, 60000);
 }
 
 function notify(message) {
