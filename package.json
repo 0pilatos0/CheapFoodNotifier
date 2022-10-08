@@ -17,6 +17,9 @@
   },
   "homepage": "https://github.com/0pilatos0/CheapFoodNotifier#readme",
   "dependencies": {
-    "dotenv": "^16.0.3"
-  }
+    "dotenv": "^16.0.3",
+    "got": "^11.8.5",
+    "tough-cookie": "^4.1.2"
+  },
+  "type": "module"
 }
